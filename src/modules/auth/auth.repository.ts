@@ -1,5 +1,4 @@
 import {prisma} from "../../config/prisma.js";
-
 import type {signUpDTO} from './auth.types.js';
 
 
