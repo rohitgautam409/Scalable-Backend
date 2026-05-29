@@ -3,11 +3,18 @@ import jwt from 'jsonwebtoken';
 import {AuthRepository} from './auth.repository.js';
 import type {loginDTO,signUpDTO}  from './auth.types.js'
 import {AppError} from '../../shared/errors/AppError.js'
-
+import type {jwtPayLoad} from './auth.types.js'
+import {env } from '../../config/env.js'
 
 export class AuthService {
     
-    constructor(private authRepository: AuthRepository){}
+    constructor(private authRepository: AuthRepository){} 
+
+    private generateToken(payload : jwtPayLoad){
+        return jwt.sign(payload,env.JWT_SECRET,{expiresIn : '1d'});
+    }
+
+
 
     async signUp(data :signUpDTO){
         const existingUser = await this.authRepository.findUserByEmail(data.email);
@@ -19,9 +26,17 @@ export class AuthService {
             ...data,
             password : hashedPassword
         });
-        const token = jwt.sign({id :user.id},process.env.JWT_SECRET,{expiresIn : `7d`})
-        return {user, token};
+        const token = this.generateToken({id : user.id});
+        return {
+            user: {
+                id : user.id,
+                email : user.email,
+                name : user.name,
+            }
+            , token};
     }
+
+
     async login(data :loginDTO){
         const user = await this.authRepository.findUserByEmail(data.email);
         if(!user){
@@ -31,7 +46,13 @@ export class AuthService {
         if(!isPasswordValid){
             throw new AppError('Invalid Credentials',401);
         }
-        const token = jwt.sign({id:user.id},process.env.JWT_SECRET,{expiresIn : '7d'})
-        return {user,token};
+        const token = this.generateToken({id:user.id});
+        return {
+            user: {
+                id : user.id,
+                email : user.email,
+                name : user.name,
+            }
+            ,token};
     }
 }

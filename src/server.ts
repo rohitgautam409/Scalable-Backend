@@ -1,7 +1,7 @@
-import app from './app';
+import app from './app.js';
+import env from './config/env.js'
 
-const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, ()=>{
-    console.log(`Auth service is running on port ${PORT}`);
+app.listen(env.PORT, ()=>{
+    console.log(`Auth service is running on port ${env.PORT}`);
 })

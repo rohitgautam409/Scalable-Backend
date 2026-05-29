@@ -1,15 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './modules/auth/auth.routes.js'
-import dotenv from 'dotenv';
+import env from './config/env.js'
 import globalErrorHandler from './shared/errors/globalErrorHandler.js'
 
 
 const app = express();;
 
-dotenv.config()
+
 app.use(cors(
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: env.FRONTEND_URL
 ));
 
 app.use(express.json());

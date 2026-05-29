@@ -9,4 +9,5 @@ export const signUpSchema = z.object({
 export const loginSchema = z.object({
     email :z.email("Invalid email address"),
     password : z.string().min(8,"Password must be atleast 8 characters long").max(20)
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}.*$/)
 })
