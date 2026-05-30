@@ -11,7 +11,7 @@
   // }\
 
 import { z } from "zod";
-import { signUpSchema, loginSchema } from './auth.schema.js';
+import { signUpSchema, loginSchema,refreshSchema } from './auth.schema.js';
 
   export type signUpDTO = 
    z.infer<typeof signUpSchema>;
@@ -25,3 +25,5 @@ import { signUpSchema, loginSchema } from './auth.schema.js';
     
    }
 
+   export type refreshDTO = 
+    z.infer<typeof refreshSchema>

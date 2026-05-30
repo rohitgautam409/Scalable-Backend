@@ -4,6 +4,16 @@ import {AuthService} from './auth.service.js';
 export class AuthController{
     constructor(private authService : AuthService){}
 
+
+    refreshToken = async(req:Request,res:Response,next:NextFunction)=>{
+        try{
+            const result = await this.authService.refreshToken(req.body.refreshToken);
+            return res.json(result)
+        }catch(error){
+            next(error)
+        }
+    }
+
     signUp = async(req:Request,res:Response,next:NextFunction)=>{
         try{
             const result = await this.authService.signUp(req.body);
