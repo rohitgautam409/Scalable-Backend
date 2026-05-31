@@ -15,3 +15,11 @@ export const loginSchema = z.object({
 export const refreshSchema = z.object({
     refreshToken : z.string()
 })
+
+
+export const envSchema = z.object({
+    DATABASE_URL : z.string(),
+    JWT_SECRET : z.string(),
+    FRONTEND_URL : z.string(),
+    PORT : z.string()
+})

@@ -3,6 +3,7 @@ import cors from 'cors';
 import authRoutes from './modules/auth/auth.routes.js'
 import{ env} from './config/env.js'
 import {globalErrorHandler} from './shared/errors/globalErrorHandler.js'
+import {requestLogger} from './shared/middleware/requestLogger.js'
 
 
 const app = express();;
@@ -15,6 +16,7 @@ app.use(cors(
 ));
 
 app.use(express.json());
+app.use(requestLogger);
 
 app.use('api/v1/auth',authRoutes);
 app.use(globalErrorHandler);

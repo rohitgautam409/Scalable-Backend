@@ -25,6 +25,7 @@ authRouter.post('/refresh',Validate(refreshSchema),authController.refreshToken);
 //Protected Route to get user details
 authRouter.get('/me',authenticate,(req,res)=>{
     res.json({
+        success : true,
         user : req.user
     })
 })

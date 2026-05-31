@@ -17,7 +17,7 @@ export class AuthService {
         })
     }
     private generateRefreshToken(payload: jwtPayLoad) {
-        return jwt.sign(payload, env.JWT_SECRET, {
+        return jwt.sign(payload, env.REFRESH_SECRET, {
             expiresIn: '7d'
         })
     }
