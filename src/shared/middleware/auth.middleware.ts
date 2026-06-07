@@ -20,7 +20,7 @@ export const authenticate =(req:Request,res:Response,next:NextFunction) =>{
         
 
         const verifyAccessToken =(token:string): jwtPayLoad =>{
-            const decoded = jwt.verify(token,env.JWT_SECRET);
+            const decoded = jwt.verify(token,env.JWT_SECRET); 
             return decoded as jwtPayLoad
         }
         req.user = verifyAccessToken(token)

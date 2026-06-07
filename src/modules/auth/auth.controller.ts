@@ -1,30 +1,40 @@
 import type {Request,Response,NextFunction} from 'express';
 import {AuthService} from './auth.service.js';
+import { asyncHandler } from '../../shared/utils/asyncHandler.js';
+import { sendResponse} from '../../shared/utils/sendResponse.js'
 
 export class AuthController{
     constructor(private authService : AuthService){}
 
-    signUp = async(req:Request,res:Response,next:NextFunction)=>{
-        try{
-            const result = await this.authService.signUp(req.body);
-            return res.status(200).json({
-                success : true,
-                data : result,
-            })
-        }catch(error){
-            next(error);
-        }
+
+    refreshToken = async(req:Request,res:Response,next:NextFunction)=>{
+        
+            const result = await this.authService.refreshToken(req.body.refreshToken);
+            return res.json(result)
+       
     }
 
-    login = async(req:Request,res:Response,next:NextFunction)=>{
-        try{
+    signUp = asyncHandler(async(req:Request,res:Response,next:NextFunction)=>{
+        
+            const result = await this.authService.signUp(req.body);
+           return sendResponse(res,201,
+            {
+                success : true,
+                message : 'User created successfully',
+                data : result,
+            }
+           )
+        
+    })
+
+    login = asyncHandler(async(req:Request,res:Response,next:NextFunction)=>{
+       
             const result = await this.authService.login(req.body);
-        return res.status(200).json({
-            success : true,
-            data :result,
-        })
-        }catch(error){
-            next(error);
-        }
-    }
+            return sendResponse(res,200,{
+                success : true,
+                message : 'Login successful',
+                data : result,
+            })
+       
+    })
 }

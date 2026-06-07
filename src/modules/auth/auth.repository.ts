@@ -1,9 +1,10 @@
 import {prisma} from "../../config/prisma.js";
 import type {signUpDTO} from './auth.types.js';
+import type {IAuthRepository} from './interfaces/IAuthRepository.js';
 
 
 //AuthRepository class to handle all database operations related to authentication
-export class AuthRepository {
+export class AuthRepository implements IAuthRepository{
 
     //Method to create a new user in the database
     async createUser(data :signUpDTO){
