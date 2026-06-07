@@ -1,15 +1,15 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { AuthRepository } from './auth.repository.js';
 import type { loginDTO, signUpDTO, refreshDTO } from './auth.types.js'
 import { AppError } from '../../shared/errors/AppError.js'
 import type { jwtPayLoad } from './auth.types.js'
 import { env } from '../../config/env.js'
 import { RefreshTokenRepository} from './refresh-token.repository.js'
+import type { IAuthRepository } from './interfaces/IAuthRepository.js';
 
 export class AuthService {
 
-    constructor(private authRepository: AuthRepository,private refreshTokenRepository: RefreshTokenRepository) { }
+    constructor(private authRepository: IAuthRepository,private refreshTokenRepository: RefreshTokenRepository) { }
 
     private generateAccessToken(payload: jwtPayLoad) {
         return jwt.sign(payload, env.JWT_SECRET, {
@@ -29,12 +29,13 @@ export class AuthService {
      try{
 
         const storedToken = await this.refreshTokenRepository.findToken(refreshToken);
+
         if(!storedToken){
             throw new AppError('Refresh Token not found',401)
         }
 
         const decoded  = jwt.verify(refreshToken,env.JWT_SECRET) as jwtPayLoad;
-        const accessToken  = this.generateAccessToken({id : decoded.id})
+        const accessToken  = this.generateAccessToken({id : decoded.id, role: decoded.role})
         return {
             accessToken
         }
@@ -62,8 +63,8 @@ export class AuthService {
             ...data,
             password: hashedPassword
         });
-        const accessToken = this.generateAccessToken({ id: user.id });
-        const refreshToken = this.generateRefreshToken({ id: user.id });
+        const accessToken = this.generateAccessToken({ id: user.id, role: user.role });
+        const refreshToken = this.generateRefreshToken({ id: user.id, role: user.role });
 
         const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
@@ -90,8 +91,8 @@ export class AuthService {
         if (!isPasswordValid) {
             throw new AppError('Invalid Credentials', 401);
         }
-        const accessToken  = this.generateAccessToken({id:user.id});
-        const refreshToken = this.generateRefreshToken({id:user.id});
+        const accessToken  = this.generateAccessToken({id:user.id, role: user.role});
+        const refreshToken = this.generateRefreshToken({id:user.id, role: user.role});
 
         const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);  //7 Days
 

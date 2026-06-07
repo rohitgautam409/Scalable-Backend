@@ -21,9 +21,17 @@ model User {
 
   name String
 
+  role Role @default(USER)
+
   refreshTokens RefreshToken[]
 
   createdAt DateTime @default(now())
+}
+
+enum Role {
+  User
+
+  ADMIN
 }
 
 model RefreshToken {

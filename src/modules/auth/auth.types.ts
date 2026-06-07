@@ -22,6 +22,8 @@ import { signUpSchema, loginSchema,refreshSchema } from './auth.schema.js';
 
    export interface jwtPayLoad{
     id : string;
+
+    role : "USER" | "ADMIN";
     
    }
 
